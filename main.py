@@ -15,19 +15,18 @@ root.title('A* Demonstration')
 
 # Select Start Node, Goal, and build Obstacles (Obstacles)
 mapOption = StringVar()
-setStartButton = Radiobutton(root, text="Set Start", value="start", var=mapOption)\
-                            .grid(row=0, column=0, sticky=W, padx=20, pady=20)
-setGoalButton = Radiobutton(root, text="Set Goal", value="goal", var=mapOption)\
-                            .grid(row=0, column=1, sticky=W)
-setObstacleButton = Radiobutton(root, text="Build Obstacles", value="obstacle", var=mapOption)\
-                            .grid(row=0, column=2, sticky=W)
+setStartButton = Radiobutton(root, text="Set Start", value="start", var=mapOption)
+setStartButton.grid(row=0, column=0, sticky=W, padx=20, pady=20)
+setGoalButton = Radiobutton(root, text="Set Goal", value="goal", var=mapOption)
+setGoalButton.grid(row=0, column=1, sticky=W)
+setObstacleButton = Radiobutton(root, text="Build Obstacles", value="obstacle", var=mapOption)
+setObstacleButton.grid(row=0, column=2, sticky=W)
 
 # Heuristic Options.
 heuristicOption = Combobox(root, values=[
                                     "Manhattan",
                                     "Diagonal",
-                                    "Euclidean",
-                                    "Custom heuristic"], width=10)
+                                    "Euclidean"], width=10)
 heuristicOption.current(0)
 heuristicOption.grid(row=0, column=4, sticky=W)
 
@@ -68,10 +67,14 @@ def location(xcor, ycor):
         btnList[xcor][ycor]['text'] = "S"
         btnList[xcor][ycor]['fg'] = "red"
         start.append((xcor, ycor))
+        setStartButton.config(state=DISABLED)
+        setStartButton.deselect()
     if value == "goal":
         btnList[xcor][ycor]['text'] = "G"
         btnList[xcor][ycor]['fg'] = "blue"
         goal.append((xcor, ycor))
+        setGoalButton.config(state=DISABLED)
+        setGoalButton.deselect()
 
 
 mapWidth = 30
@@ -87,14 +90,20 @@ for x in range(mapWidth):
 
 
 def run():
+    # enable setStart and setGoal
+    setStartButton.config(state=NORMAL)
+    setGoalButton.config(state=NORMAL)
+
+    # A* search
     map = GridWithWeights(mapWidth, mapHeight)
     map.obstacles = obstacleList
     startNode = start[0]
     goalNode = goal[0]
-    came_from, cost_so_far = a_star_search(map, startNode, goalNode)
-    nodes_along_path = shortest_path(came_from, start=startNode, goal=goalNode)
+    option = heuristicOption.get()
+    node_track, cost = a_star_search(map, startNode, goalNode, option)
+    nodes_along_path = shortest_path(node_track, start=startNode, goal=goalNode)
 
-    for loc in came_from:
+    for loc in node_track:
         if loc != startNode and loc != goalNode:
             btnList[loc[0]][loc[1]]['text'] = "+"
             btnList[loc[0]][loc[1]]['fg'] = "grey"
@@ -103,6 +112,11 @@ def run():
         if node != startNode and node != goalNode:
             btnList[node[0]][node[1]]['text'] = "*"
             btnList[node[0]][node[1]]['fg'] = "orange"
+
+    # re-set-up new round
+    obstacleList.clear()
+    start.clear()
+    goal.clear()
 
 
 runButton = Button(root, text="  RUN  ", height=2, width=4, command=run)
@@ -119,7 +133,6 @@ def clear():
     obstacleList.clear()
     start.clear()
     goal.clear()
-
 
 clearButton = Button(root, text="CLEAR", height=2, width=6, command=clear)
 clearButton.grid(row=0, column=8, sticky=W+E, padx=10)

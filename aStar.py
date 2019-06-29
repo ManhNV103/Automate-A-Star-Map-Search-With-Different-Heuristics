@@ -67,7 +67,11 @@ def shortest_path(node_track, start, goal):
     path = []
     while currentNode != start:
         path.append(currentNode)
-        currentNode = node_track[currentNode]
+        try:
+            currentNode = node_track[currentNode]
+        except:
+            print("There is no path available from start node to goal")
+            break
     path.append(start)
     path.reverse()  # reverse to get the original order from the start to the goal
     return path
@@ -92,8 +96,16 @@ def euclidean(goal, node):
     dy = abs(x1 - x2)
     return sqrt(dx*dx + dy*dy)
 
+def heuristic(goal, node, option):
+    if option == "Manhattan":
+        return manhattan(goal, node)
+    if option == "Diagonal":
+        return diagonal(goal, node)
+    if option == "Euclidean":
+        return euclidean(goal, node)
 
-def a_star_search(graph, start, goal):
+
+def a_star_search(graph, start, goal, option):
     # Create and initiate the priority queue.
     pQueue = PriorityQueue()
     pQueue.put(start, 0)
@@ -104,15 +116,13 @@ def a_star_search(graph, start, goal):
 
     while not pQueue.empty():
         currentNode = pQueue.pop()
-
         if currentNode == goal:
             break
-
         for successor in graph.neighbors(currentNode):
             g_n = cost[currentNode] + graph.cost(currentNode, successor)
             if successor not in cost or g_n < cost[successor]:
                 cost[successor] = g_n
-                f_n = g_n + diagonal(goal, successor)
+                f_n = g_n + heuristic(goal, successor, option)
                 pQueue.put(successor, f_n)
                 node_track[successor] = currentNode
 
