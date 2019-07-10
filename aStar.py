@@ -1,6 +1,4 @@
 # A Star + Heuristic Library
-# PriorityQueue Class are adopted from https://www.redblobgames.com/
-# Date: June 27, 2019
 
 import heapq
 from math import sqrt
