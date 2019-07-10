@@ -1,4 +1,6 @@
 # A Star + Heuristic Library
+# Author: Nguyen Van Manh
+# Date: June 27, 2019
 
 import heapq
 from math import sqrt
@@ -36,6 +38,7 @@ class GridWithWeights(SquareGrid):
         return self.weights.get(to_node, 1)  # return 1 if weight not exist
 
 
+# Adopted from https://www.redblobgames.com/
 class PriorityQueue:
     def __init__(self):
         self.elements = []
