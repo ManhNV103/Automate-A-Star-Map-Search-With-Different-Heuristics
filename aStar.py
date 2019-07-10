@@ -70,7 +70,7 @@ def shortest_path(node_track, start, goal):
         try:
             currentNode = node_track[currentNode]
         except:
-            print("There is no path available from start node to goal")
+            print("There is no path available from the start node to goal")
             break
     path.append(start)
     path.reverse()  # reverse to get the original order from the start to the goal
