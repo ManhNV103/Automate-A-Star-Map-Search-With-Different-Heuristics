@@ -1,6 +1,5 @@
 # A Star + Heuristic Library
-# Author: Nguyen Van Manh
-# Some parts of the code are adopted from different articles at https://www.redblobgames.com/
+# PriorityQueue Class are adopted from https://www.redblobgames.com/
 # Date: June 27, 2019
 
 import heapq
