@@ -73,11 +73,13 @@ def shortest_path(node_track, start, goal):
     path.reverse()  # reverse to get the original order from the start to the goal
     return path
 
+
 # Heuristics
 def manhattan(goal, node):
     (x1, y1) = goal
     (x2, y2) = node
     return abs(x1 - x2) + abs(y1 - y2)
+
 
 def diagonal(goal, node):
     (x1, y1) = goal
@@ -86,12 +88,14 @@ def diagonal(goal, node):
     dy = abs(y1 - y2)
     return dx + dy + (sqrt(2) - 2) * min(dx, dy)
 
+
 def euclidean(goal, node):
     (x1, y1) = goal
     (x2, y2) = node
     dx = abs(x1 - x2)
     dy = abs(x1 - x2)
     return sqrt(dx*dx + dy*dy)
+
 
 def heuristic(goal, node, option):
     if option == "Manhattan":
